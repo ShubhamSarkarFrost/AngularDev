@@ -3,3 +3,4 @@ Steps to Install:
 2 - ng new my-first-practice-project
 3 -    cd my-first-practice-project
 4 -    ng serve
+5 - to generate Component - ng generate component <component-name>
