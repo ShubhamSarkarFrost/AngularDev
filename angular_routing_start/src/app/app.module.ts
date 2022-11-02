@@ -11,14 +11,10 @@ import { UserComponent } from './users/user/user.component';
 import { EditServerComponent } from './servers/edit-server/edit-server.component';
 import { ServerComponent } from './servers/server/server.component';
 import { ServersService } from './servers/servers.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import {AppRoutingModule} from "./app-routing-module";
 
-//Here is a Change
-const appRoutes: Routes = [
-  {path:'', component:HomeComponent},
-  {path:'users', component:UsersComponent},
-  {path:'users/:id/:name', component:UserComponent}, // to take a dynamic path as a route use : it will be later used to pass as a parammeter
-  {path:'servers', component:ServersComponent}
-];
+
 
 
 @NgModule({
@@ -29,12 +25,14 @@ const appRoutes: Routes = [
     ServersComponent,
     UserComponent,
     EditServerComponent,
-    ServerComponent
+    ServerComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)   // here is the Change
+    AppRoutingModule
+
   ],
   providers: [ServersService],
   bootstrap: [AppComponent]
