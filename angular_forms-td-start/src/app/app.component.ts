@@ -9,8 +9,16 @@ import {NgForm} from "@angular/forms";
 export class AppComponent {
   @ViewChild('f') signupform: NgForm
   defaultquestion ='pet'
-  answer=""
-  genders = ['male','female']
+  answer="";
+  genders = ['male','female'];
+  user = {
+    username: '',
+    mail: '',
+    secretquestion: '',
+    secretanswer: '',
+    gender: ''
+  };
+  submitted = false
   suggestUserName() {
     const suggestedName = 'Superuser';
     // this.signupform.setValue({
@@ -33,6 +41,16 @@ export class AppComponent {
   // }
 
   onSubmit(){
-    console.log(this.signupform)
+    this.submitted = true;
+     this.user.username = this.signupform.value.userData.username;
+     this.user.mail = this.signupform.value.userData.email;
+     this.user.secretquestion = this.signupform.value.secret;
+     this.user.secretanswer = this.signupform.value.questionAnswer;
+     this.user.gender = this.signupform.value.gender;
+
+     this
+  }
+  onReset() {
+    this.signupform.reset()
   }
 }

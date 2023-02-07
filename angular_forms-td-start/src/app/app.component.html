@@ -53,7 +53,6 @@
                     class="form-control"
           [(ngModel)]="answer"></textarea>
         </div>
-        <p>Your Reply: {{ answer }}</p>
         <div class="radio" *ngFor="let gender of genders">
           <label>
             <input type="radio"
@@ -67,6 +66,19 @@
                 type="submit"
                [disabled]="!f.valid">Submit</button>
       </form>
+      <hr>
+      <div class="row" *ngIf="submitted">
+        <div class="col-xs-12">
+          <h3>Your Data</h3>
+          <p>Username: {{ user.username }}</p>
+          <p>Mail: {{ user.mail }} </p>
+          <p>Secret Question: {{ user.secretquestion }} </p>
+          <p>Answer: {{ user.secretanswer }}</p>
+          <p>Gender: {{ user.gender }}</p>
+        </div>
+      </div>
+      <hr>
+      <button class="btn btn-danger" (click)="onReset()" *ngIf="submitted">Reset</button>
     </div>
   </div>
 </div>
