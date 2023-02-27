@@ -10,7 +10,11 @@
               id="username"
               formControlName="username"
               class="form-control">
-            <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched" class="help-block">Please Enter a Valid Username</span>
+            <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
+                  class="help-block">
+              <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">This Name is Invalid!!</span>
+              <span *ngIf="signupForm.get('userData.username').errors['required']">This Field is Required!!</span>
+            </span>
           </div>
           <div class="form-group">
             <label for="email">email</label>
@@ -19,7 +23,11 @@
               id="email"
               formControlName="email"
               class="form-control">
-            <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched" class="help-block">Please Enter a Valid Email</span>
+            <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
+                  class="help-block">
+              <span *ngIf="signupForm.get('userData.email').errors['emailIsForbidden']">This Email is Illegal!!</span>
+              <span *ngIf="signupForm.get('userData.email').errors['required']">This Field is Required!!</span>
+            </span>
           </div>
         </div>
         <div class="radio" *ngFor="let gender of genders">
