@@ -1,11 +1,16 @@
 import {Injectable} from "@angular/core";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import { Post } from "./post.model";
-import {map} from "rxjs/operators";
+import {map , catchError} from "rxjs/operators";
+import { Subject, throwError } from "rxjs";
+import {errorObject} from "rxjs/internal-compatibility";
 
 
 @Injectable({providedIn: "root"})
 export class PostService {
+
+  error = new Subject<string>();
+
   constructor(private http: HttpClient) {}
 
   createAndStorePost(title:string, content:string){
@@ -14,12 +19,21 @@ export class PostService {
     this.http.post<{name: string}>('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json',postData).subscribe((responseData) =>
     {
       console.log(responseData)
+    }, error =>{
+      this.error.next(error.message)
     })
   }
 
   fetchPost(){
     //.... fetch http request
-   return this.http.get<{ [key: string]: Post }>('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json')
+   return this.http.get<{ [key: string]: Post }>('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json', {
+     headers: new HttpHeaders({
+       'Custom-Header': 'hello'
+     }),
+     params: new HttpParams().set('print', 'pretty')
+
+   }
+   )
         .pipe(map(responseData => {
             const postArray: Post[] = [];
             for (const key in responseData) {
@@ -29,6 +43,10 @@ export class PostService {
 
             }
             return postArray;
+          }),
+          catchError(errorRes => {
+            // send the error to analytics server
+            return throwError(errorRes)
           })
         );
     }
