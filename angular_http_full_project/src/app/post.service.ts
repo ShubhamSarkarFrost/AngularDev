@@ -1,9 +1,8 @@
 import {Injectable} from "@angular/core";
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import { Post } from "./post.model";
-import {map , catchError} from "rxjs/operators";
-import { Subject, throwError } from "rxjs";
-import {errorObject} from "rxjs/internal-compatibility";
+import {HttpClient, HttpEventType, HttpHeaders, HttpParams} from "@angular/common/http";
+import {Post} from "./post.model";
+import {catchError, map, tap} from "rxjs/operators";
+import {Subject, throwError} from "rxjs";
 
 
 @Injectable({providedIn: "root"})
@@ -16,9 +15,11 @@ export class PostService {
   createAndStorePost(title:string, content:string){
     //... send http request
     const postData: Post ={title:title, content:content}
-    this.http.post<{name: string}>('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json',postData).subscribe((responseData) =>
+    this.http.post<{name: string}>('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json',postData, {
+      observe : 'response'
+    }).subscribe((responseData) =>
     {
-      console.log(responseData)
+      console.log(responseData.body)
     }, error =>{
       this.error.next(error.message)
     })
@@ -30,7 +31,8 @@ export class PostService {
      headers: new HttpHeaders({
        'Custom-Header': 'hello'
      }),
-     params: new HttpParams().set('print', 'pretty')
+     params: new HttpParams().set('print', 'pretty'),
+     responseType : 'json'
 
    }
    )
@@ -52,6 +54,17 @@ export class PostService {
     }
 
    deletePost(){
-      return  this.http.delete('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json')
+      return  this.http.delete('https://angular-complete-guide-ef41a-default-rtdb.firebaseio.com/posts.json', {
+        observe : 'events'
+      })
+        .pipe(tap(event =>{
+          console.log(event)
+          if(event.type === HttpEventType.Sent){
+            //...
+          }
+          if(event.type === HttpEventType.Response){
+            console.log(event.body)
+          }
+        }))
    }
 }
